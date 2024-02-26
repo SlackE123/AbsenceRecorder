@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct DivisionsView: View {
     var divisions: [Division]
+    @EnvironmentObject var state: StateController
     @State private var currentDate: Date = Date()
     
     var body: some View {
         NavigationView {
-            List(divisions, id: \.self.code) { division in
-                HStack {
-                    Image(systemName: "\(division.students.count).circle")
-                    Text("\(division.code)")
+            List(state.divisions, id: \.self.code) { division in
+                NavigationLink(destination: AbsenceView(division: division)) {
+                DivisionItem(division: division)
                 }
             }
             .navigationTitle(currentDate.getShortDate())
@@ -36,8 +36,9 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct DivisionsView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(divisions: Division.examples)
+        DivisionsView(divisions: Division.examples)
+            .environmentObject(StateController())
     }
 }
